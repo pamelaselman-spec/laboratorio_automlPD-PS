@@ -1,10 +1,11 @@
 import pandas as pd
-import sys
 import pickle
 import json
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error
 
+# Cargar datos procesados
 df = pd.read_csv("data/processed.csv")
 
 # Validar columna objetivo
@@ -18,7 +19,7 @@ if target_col not in df.columns:
 X = df.drop(target_col, axis=1)
 y = df[target_col]
 
-# Lista de modelos
+# Lista de modelos y sus parámetros
 model_list = ["linear", "random_forest", "gradient_boosting"]
 model_params = {
     "linear": {"fit_intercept": True},
@@ -30,6 +31,7 @@ best_score = -float("inf")
 best_model = None
 best_model_name = None
 
+# Entrenamiento y selección del mejor modelo
 for name in model_list:
     if name == "linear":
         model = LinearRegression(**model_params["linear"])
@@ -48,22 +50,28 @@ for name in model_list:
         best_model = model
         best_model_name = name
 
+# Guardar el modelo entrenado
 pickle.dump(best_model, open("model.pkl", "wb"))
-json.dump({"model": best_model_name, "score": round(best_score, 4)}, open("metrics_train.json", "w"))
 
-
-import json
-from sklearn.metrics import mean_squared_error
-
-# Suponiendo que ya tienes y_pred y y
+# Predecir y calcular métricas
+y_pred = best_model.predict(X)
 mse = mean_squared_error(y, y_pred)
-score = model.score(X, y)
 
-# Guardar métricas en formato JSON
-metrics = {
+# Guardar métricas en dos archivos si lo deseas
+metrics_train = {
+    "model": best_model_name,
+    "score": round(best_score, 4)
+}
+metrics_full = {
     "mse": round(mse, 4),
-    "score": round(score, 4)
+    "score": round(best_score, 4)
 }
 
+with open("metrics_train.json", "w") as f:
+    json.dump(metrics_train, f)
+
 with open("metrics.json", "w") as f:
-    json.dump(metrics, f)
+    json.dump(metrics_full, f)
+
+print(f"✅ Modelo guardado como model.pkl")
+print(f"📊 Métricas guardadas en metrics_train.json y metrics.json")
