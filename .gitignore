@@ -4,3 +4,5 @@ __pycache__/
 data/*.csv
 models/
 /metrics.json
+/metrics_train.json
+/metrics_eval.json

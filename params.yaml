@@ -1,0 +1,25 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py params.yaml
+    deps:
+      - src/preprocess.py
+      - ${dataset_path}
+    outs:
+      - data/processed.csv
+
+  train:
+    cmd: python src/train.py params.yaml
+    deps:
+      - src/train.py
+      - data/processed.csv
+    outs:
+      - model.pkl
+
+  evaluate:
+    cmd: python src/evaluate.py params.yaml
+    deps:
+      - src/evaluate.py
+      - model.pkl
+    metrics:
+      - metrics.json
+    
