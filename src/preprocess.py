@@ -6,7 +6,9 @@ import os
 try:
     # Cargar parámetros
     params = yaml.safe_load(open(sys.argv[1]))
-    dataset_path = params["dataset"]
+    dataset_path = params["dataset_path"]
+    print(f"📁 Dataset usado en preprocess: {params['dataset_path']}")
+
 
     if not os.path.exists(dataset_path):
         raise FileNotFoundError(f"Dataset no encontrado: {dataset_path}")
