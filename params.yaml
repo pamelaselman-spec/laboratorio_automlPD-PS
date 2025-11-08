@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 dataset: data/dataset_v2.csv
 target_column: MedHouseVal
+=======
+stages:
+  dataset_path: data/dataset_v1.csv  # Cambia a v2 o v3 según la versión
+  preprocess:
+    cmd: python src/preprocess.py params.yaml
+    deps:
+      - src/preprocess.py
+    outs:
+      - data/processed.csv
+>>>>>>> 06846f0 (🔁 Métricas con dataset_v1)
 
 model: [linear, random_forest, gradient_boosting]
 
