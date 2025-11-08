@@ -1,4 +1,4 @@
-dataset_path: data/dataset_v2.csv
+dataset_path: data/dataset_v1.csv
 target_column: MedHouseVal
 
 model: [linear, random_forest, gradient_boosting]
