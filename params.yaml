@@ -1,25 +1,19 @@
-stages:
-  preprocess:
-    cmd: python src/preprocess.py params.yaml
-    deps:
-      - src/preprocess.py
-      - ${dataset_path}
-    outs:
-      - data/processed.csv
+dataset: data/dataset_v2.csv
+target_column: MedHouseVal
 
-  train:
-    cmd: python src/train.py params.yaml
-    deps:
-      - src/train.py
-      - data/processed.csv
-    outs:
-      - model.pkl
+model: [linear, random_forest, gradient_boosting]
 
-  evaluate:
-    cmd: python src/evaluate.py params.yaml
-    deps:
-      - src/evaluate.py
-      - model.pkl
-    metrics:
-      - metrics.json
-    
+model_params:
+  linear:
+    fit_intercept: true
+
+  random_forest:
+    n_estimators: 100
+    max_depth: 5
+    random_state: 42
+
+  gradient_boosting:
+    learning_rate: 0.1
+    n_estimators: 100
+    max_depth: 3
+    random_state: 42

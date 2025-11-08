@@ -50,3 +50,20 @@ for name in model_list:
 
 pickle.dump(best_model, open("model.pkl", "wb"))
 json.dump({"model": best_model_name, "score": round(best_score, 4)}, open("metrics_train.json", "w"))
+
+
+import json
+from sklearn.metrics import mean_squared_error
+
+# Suponiendo que ya tienes y_pred y y
+mse = mean_squared_error(y, y_pred)
+score = model.score(X, y)
+
+# Guardar métricas en formato JSON
+metrics = {
+    "mse": round(mse, 4),
+    "score": round(score, 4)
+}
+
+with open("metrics.json", "w") as f:
+    json.dump(metrics, f)
